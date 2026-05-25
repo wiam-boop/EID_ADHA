@@ -537,9 +537,14 @@ function downloadResult() {
     link.click();
   });
 }
-    function shareResult() {
-      const text = `نتيجتي في اختبار عيد الأضحى: ${finalResult.title} ✨
-جرب أنت أيضًا!`;
+    const text = `🐑✨ حصلت على:
+
+${finalResult.title}
+
+😄 هل ستحصل على نفس النتيجة؟
+
+جرّب الاختبار الآن:
+https://wiam-boop.github.io/EID_ADHA/`;
 
       if (navigator.share) {
         navigator.share({
