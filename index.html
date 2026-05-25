@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أي نوع من الخراف أنت؟</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255, 207, 104, 0.35), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(99, 214, 172, 0.35), transparent 35%),
+        linear-gradient(135deg, #102c3a, #17485c 55%, #0d2a35);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .app {
+      width: min(430px, 100%);
+      min-height: 720px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 34px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    .moon {
+      position: absolute;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: #ffd36e;
+      top: 28px;
+      left: 28px;
+      box-shadow: 0 0 40px rgba(255, 211, 110, 0.55);
+    }
+
+    .moon::after {
+      content: '';
+      position: absolute;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #17485c;
+      left: 23px;
+      top: -5px;
+    }
+
+    .stars span {
+      position: absolute;
+      color: #ffe7a4;
+      animation: twinkle 1.8s infinite alternate;
+    }
+    .stars span:nth-child(1) { top: 60px; right: 55px; font-size: 24px; }
+    .stars span:nth-child(2) { top: 145px; left: 60px; font-size: 18px; animation-delay: .4s; }
+    .stars span:nth-child(3) { top: 235px; right: 30px; font-size: 22px; animation-delay: .8s; }
+    .stars span:nth-child(4) { bottom: 140px; left: 45px; font-size: 20px; animation-delay: 1s; }
+
+    @keyframes twinkle {
+      from { opacity: .35; transform: scale(.9); }
+      to { opacity: 1; transform: scale(1.15); }
+    }
+
+    .screen {
+      display: none;
+      position: relative;
+      z-index: 2;
+      min-height: 660px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fade .45s ease;
+    }
+
+    .screen.active { display: flex; }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: #fff3c7;
+    }
+
+    h1 {
+      font-size: 38px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: 25px;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      font-weight: 900;
+    }
+
+    p {
+      color: rgba(255,255,255,0.84);
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 22px;
+    }
+
+    .hero-card {
+      width: 100%;
+      background: linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
+      border-radius: 30px;
+      padding: 24px 16px;
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.26);
+    }
+
+    .eid-illustration {
+      width: 260px;
+      height: 260px;
+      margin: auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .start-sheep-img {
+      width: 245px;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,.28));
+      animation: floatSheep 3s ease-in-out infinite;
+    }
+
+    @keyframes floatSheep {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.03); }
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      padding: 16px 22px;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .25s ease;
+      color: #102c3a;
+      background: linear-gradient(135deg, #ffd36e, #ffb33f);
+      box-shadow: 0 12px 24px rgba(255, 179, 63, 0.28);
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn.secondary {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.28);
+      box-shadow: none;
+    }
+
+    .progress {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .bar {
+      height: 100%;
+      width: 12.5%;
+      background: linear-gradient(90deg, #ffd36e, #8dffcb);
+      border-radius: 999px;
+      transition: .3s ease;
+    }
+
+    .question-box {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .option {
+      width: 100%;
+      padding: 13px 15px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff;
+      border-radius: 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: .2s ease;
+      text-align: right;
+    }
+
+    .option:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateX(-4px);
+    }
+
+    .result-card {
+      overflow: hidden;
+      width: 100%;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 30px;
+      padding: 20px 18px;
+      margin-bottom: 18px;
+    }
+
+    .result-img {
+      width: 230px;
+      max-width: 100%;
+      height: 230px;
+      object-fit: contain;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,.28));
+      animation: popResult .55s ease;
+    }
+
+    @keyframes popResult {
+      from { opacity: 0; transform: scale(.75) rotate(-4deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    .result-title {
+      color: #ffd36e;
+      font-size: 30px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .mini {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 18px;
+    }
+
+.watermark {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  left: 0;
+  text-align: center;
+  color: rgba(255,255,255,0.52);
+  font-size: 13px;
+  z-index: 3;
+}
+    
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="moon"></div>
+    <div class="stars">
+      <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
+    </div>
+
+    <section class="screen active" id="start-screen">
+      <div class="badge">نسخة عيد الأضحى 🐑</div>
+      <h1>عيد أضحى مبارك</h1>
+      <p>اكتشف شخصيتك في العيد من خلال اختبار خفيف ومضحك: أي نوع من الخراف أنت؟</p>
+
+      <div class="hero-card">
+        <div class="eid-illustration">
+          <!-- ضعي صورة البداية في نفس مجلد ملف HTML وسمّيها ram.png -->
+          <img src="ram.png" alt="كبش عيد الأضحى مبتسم" class="start-sheep-img">
+        </div>
+      </div>
+
+      <button class="btn" onclick="startQuiz()">ابدأ الاختبار 🚀</button>
+      <div class="mini">8 أسئلة خفيفة والنتيجة تظهر فورًا</div>
+    </section>
+
+    <section class="screen" id="quiz-screen">
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="badge" id="question-number">السؤال 1 من 8</div>
+      <h2 id="question-text"></h2>
+      <div class="question-box" id="options"></div>
+    </section>
+
+    <section class="screen" id="result-screen">
+      <div class="badge">نتيجتك ظهرت 🎉</div>
+      <div class="result-card" id="result-card">
+        <img src="1.PNG" alt="صورة النتيجة" class="result-img" id="result-img">
+        <div class="result-title" id="result-title"></div>
+        <p id="result-description"></p>
+      </div>
+      
+              <button class="btn" onclick="shareResult()">شارك النتيجة 📲</button>
+
+      <button class="btn secondary" onclick="restartQuiz()">أعد الاختبار 🔄</button>
+      <div class="mini">احفظ النتيجة وانشرها في الستوري</div>
+    </section>
+
+    <div class="watermark">Made with ❤️ by @wiam.dev</div>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        text: 'إذا استيقظت يوم العيد، ما أول شيء تفعله؟',
+        options: [
+          { text: 'أنهض بسرعة وأنظم كل شيء', type: 'leader' },
+          { text: 'أفتح الهاتف وأشوف الرسائل', type: 'smart' },
+          { text: 'أمزح مع العائلة من أول دقيقة', type: 'funny' },
+          { text: 'أقول خمس دقائق فقط وأنام', type: 'lazy' }
+        ]
+      },
+      {
+        text: 'لو طلبوا منك المساعدة في البيت يوم العيد؟',
+        options: [
+          { text: 'أساعد بدون تردد', type: 'leader' },
+          { text: 'أبحث عن أسهل طريقة لإنهاء المهمة', type: 'smart' },
+          { text: 'أضحك وأهرب قبل أن يبدأ العمل', type: 'funny' },
+          { text: 'أقول لهم: بعد قليل', type: 'lazy' }
+        ]
+      },
+      {
+        text: 'اختار أكثر شيء يصفك أمام الناس؟',
+        options: [
+          { text: 'أحب أن أكون المسؤول', type: 'leader' },
+          { text: 'أحب أن أبدو أنيقًا ومميزًا', type: 'proud' },
+          { text: 'أحب البيع والربح والصفقات', type: 'merchant' },
+          { text: 'أحب اللعب والتحدي', type: 'gamer' }
+        ]
+      },
+      {
+        text: 'لو أعطوك مال العيدية، ماذا تفعل به؟',
+        options: [
+          { text: 'أدخره أو أستثمره', type: 'merchant' },
+          { text: 'أشتري شيئًا يجعلني أبدو فخمًا', type: 'proud' },
+          { text: 'أشتري لعبة أو شيء للقيمنغ', type: 'gamer' },
+          { text: 'أشتري أكل لذيذ فورًا', type: 'foodie' }
+        ]
+      },
+      {
+        text: 'في جمعة العائلة أنت غالبًا...',
+        options: [
+          { text: 'تنظم الجميع وتتحكم في الجو', type: 'leader' },
+          { text: 'تحلل كل شيء بصمت', type: 'smart' },
+          { text: 'تبدأ النكت والمقالب', type: 'funny' },
+          { text: 'تبحث عن مكان مريح للجلوس', type: 'lazy' }
+        ]
+      },
+      {
+        text: 'ما أكثر شيء يجذبك في العيد؟',
+        options: [
+          { text: 'الأجواء العائلية والمسؤولية', type: 'leader' },
+          { text: 'الصور واللباس الجميل', type: 'proud' },
+          { text: 'الألعاب والراحة بعد الزيارات', type: 'gamer' },
+          { text: 'الأكل والحلويات بدون نقاش', type: 'foodie' }
+        ]
+      },
+      {
+        text: 'لو صديقك قال لك: تعال نخرج، ماذا ترد؟',
+        options: [
+          { text: 'تمام، أنا أخطط للمكان', type: 'leader' },
+          { text: 'خليني أحسب هل تستاهل الخرجة', type: 'smart' },
+          { text: 'نخرج بشرط نعمل فوضى مضحكة', type: 'funny' },
+          { text: 'لا، عندي مرحلة لازم أكملها', type: 'gamer' }
+        ]
+      },
+      {
+        text: 'أمام مائدة مليئة بالطعام، أنت...',
+        options: [
+          { text: 'أنتظر الجميع باحترام', type: 'leader' },
+          { text: 'أختار أفضل طبق بذكاء', type: 'smart' },
+          { text: 'أصور نفسي قبل الأكل', type: 'proud' },
+          { text: 'آكل بشراهة ولا أهتم بأي أحد', type: 'foodie' }
+        ]
+      }
+    ];
+
+    const results = {
+      leader: {
+        image: '1.PNG',
+        title: '🐏 الخروف القائد',
+        description: 'أنت شخص مسؤول، تحب التنظيم وتحب أن يكون كل شيء في مكانه. في العيد الناس تعتمد عليك كثيرًا.'
+      },
+      smart: {
+        image: '2.PNG',
+        title: '🤓 الخروف الذكي',
+        description: 'أنت تفكر قبل أن تتحرك، تحب الحلول الذكية وتعرف كيف تخرج من أي موقف بأقل مجهود.'
+      },
+      funny: {
+        image: '3.PNG',
+        title: '😂 الخروف المشاغب',
+        description: 'أنت روح العيد! تحب المزاح، تضحك الناس وتحوّل أي موقف عادي إلى لحظة مضحكة.'
+      },
+      lazy: {
+        image: '4.PNG',
+        title: '😴 الخروف الكسول',
+        description: 'أنت تحب الراحة والهدوء. العيد بالنسبة لك أكل، نوم، وابتعاد عن أي مجهود غير ضروري.'
+      },
+      proud: {
+        image: '5.PNG',
+        title: '😎 الخروف المتباهي',
+        description: 'أنت تحب الظهور بإطلالة قوية، واثق من نفسك وتعرف كيف تخطف الانتباه أينما ذهبت.'
+      },
+      merchant: {
+        image: '6.PNG',
+        title: '💰 الخروف التاجر',
+        description: 'أنت تفكر بعقلية الربح والفرص. حتى في العيد، عينك على الصفقة الذكية والمكسب الجميل.'
+      },
+      gamer: {
+        image: '7.PNG',
+        title: '🎮 الخروف اللاعب',
+        description: 'أنت تحب التحدي والألعاب. يوم العيد عندك جميل، لكن لا شيء يمنعك من إنهاء المرحلة الأخيرة.'
+      },
+      foodie: {
+        image: '8.PNG',
+        title: '🍔 الخروف الأكول',
+        description: 'أنت تعيش العيد بطريقتك الخاصة: طعام، حلويات، وأكل بشراهة دون الاهتمام بأي شيء آخر.'
+      }
+    };
+
+    let currentQuestion = 0;
+    let score = {
+      leader: 0,
+      smart: 0,
+      funny: 0,
+      lazy: 0,
+      proud: 0,
+      merchant: 0,
+      gamer: 0,
+      foodie: 0
+    };
+    let finalResult = null;
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function startQuiz() {
+      currentQuestion = 0;
+      score = {
+        leader: 0,
+        smart: 0,
+        funny: 0,
+        lazy: 0,
+        proud: 0,
+        merchant: 0,
+        gamer: 0,
+        foodie: 0
+      };
+      showScreen('quiz-screen');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById('question-number').textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+      document.getElementById('question-text').textContent = q.text;
+      document.getElementById('bar').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+      const optionsBox = document.getElementById('options');
+      optionsBox.innerHTML = '';
+
+      q.options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'option';
+        button.textContent = option.text;
+        button.onclick = () => chooseAnswer(option.type);
+        optionsBox.appendChild(button);
+      });
+    }
+
+    function chooseAnswer(type) {
+      score[type]++;
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const resultOrder = ['leader', 'smart', 'funny', 'lazy', 'proud', 'merchant', 'gamer', 'foodie'];
+      const winner = resultOrder.reduce((best, current) => {
+        return score[current] > score[best] ? current : best;
+      }, resultOrder[0]);
+
+      finalResult = results[winner];
+
+      document.getElementById('result-img').src = finalResult.image;
+      document.getElementById('result-img').alt = finalResult.title;
+      document.getElementById('result-title').textContent = finalResult.title;
+      document.getElementById('result-description').textContent = finalResult.description;
+      showScreen('result-screen');
+    }
+
+    function restartQuiz() {
+      startQuiz();
+    }
+function downloadResult() {
+  const card = document.getElementById('result-card');
+
+  html2canvas(card, {
+    backgroundColor: null,
+    scale: 3
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = finalResult.title + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+    function shareResult() {
+      const text = `نتيجتي في اختبار عيد الأضحى: ${finalResult.title} ✨
+جرب أنت أيضًا!`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'أي نوع من الخراف أنت؟',
+          text: text
+        });
+      } else {
+        navigator.clipboard.writeText(text);
+        alert('تم نسخ النتيجة! الصقيها في الستوري أو أرسليها لأصدقائك 🐑');
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
